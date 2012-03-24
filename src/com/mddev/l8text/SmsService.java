@@ -1,4 +1,4 @@
-package com.odev.l8text;
+package com.mddev.l8text;
 
 import android.app.Service;
 import android.content.Intent;

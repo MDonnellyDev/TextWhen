@@ -1,4 +1,4 @@
-package com.odev.l8text;
+package com.mddev.l8text;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

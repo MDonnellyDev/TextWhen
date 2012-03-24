@@ -1,6 +1,8 @@
-package com.odev.l8text;
+package com.mddev.l8text;
 
 import java.util.List;
+
+import com.mddev.l8text.R;
 
 import android.app.Activity;
 import android.content.Intent;
