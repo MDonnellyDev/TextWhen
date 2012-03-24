@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:isScrollContainer="true">
+
+	<DatePicker android:id="@+id/DatePicker" 
+		android:layout_height="wrap_content" 
+		android:layout_width="wrap_content" 
+		android:layout_alignParentTop="true">
+	</DatePicker>
+	
+	<TimePicker android:id="@+id/TimePicker" 
+		android:layout_toRightOf="@id/DatePicker" 
+		android:layout_alignParentRight="true"
+		android:layout_height="wrap_content" 
+		android:layout_width="wrap_content" >
+	</TimePicker>
+	
+	<RelativeLayout android:id="@+id/RecipientLayout"
+		android:layout_below="@id/TimePicker"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent">
+		<EditText android:id="@+id/EditTextRecipient"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@+id/ContactPicker"
+			android:hint="@string/text_recipient" android:layout_toRightOf="@id/EditTextRecipient">
+		</EditText>
+		
+		<Button android:id="@id/ContactPicker"
+			android:layout_alignParentRight="true"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="@string/btn_contactPicker">
+		</Button>
+	</RelativeLayout>
+	
+	<EditText android:id="@+id/EditTextBody" 
+		android:layout_below="@id/RecipientLayout" 
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content" 
+		android:layout_above="@+id/LinearLayoutButton" 
+		android:hint="@string/text_body" 
+		android:gravity="top">
+	</EditText>
+
+	<LinearLayout android:id="@+id/LinearLayoutButton" 
+		android:layout_width="fill_parent" 
+		android:layout_alignParentBottom="true" 
+		android:layout_height="wrap_content">
+		
+		<Button android:id="@+id/ButtonAddNew" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_weight="1" 
+			android:layout_gravity="bottom" 
+			android:text="@string/btn_addNew">
+		</Button>
+		<Button android:id="@+id/ButtonSendNow" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_weight="1" 
+			android:layout_gravity="bottom" 
+			android:text="@string/btn_sendNow">
+		</Button>
+		<Button android:id="@+id/ButtonCancel" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_weight="1" 
+			android:layout_gravity="bottom" 
+			android:text="@string/btn_cancel">
+		</Button>
+	</LinearLayout>
+</RelativeLayout>
