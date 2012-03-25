@@ -5,9 +5,27 @@ import java.util.Calendar;
 import android.content.Context;
 import android.content.Intent;
 
-public class OutgoingText implements Comparable {
+public class OutgoingText implements Comparable<OutgoingText> {
 	static enum RECURRENCE {
-		NONE, DAILY, WEEKLY, MONTHLY
+		NONE, DAILY, WEEKLY, MONTHLY, YEARLY;
+
+		static RECURRENCE fromInt(int recurrence) {
+
+			switch (recurrence) {
+				case 0:
+					return NONE;
+				case 1:
+					return DAILY;
+				case 2:
+					return WEEKLY;
+				case 3:
+					return MONTHLY;
+				case 4:
+					return YEARLY;
+				default:
+					return NONE;
+			}
+		}
 	};
 
 	static enum DELIVERY_STATUS {
@@ -27,7 +45,8 @@ public class OutgoingText implements Comparable {
 
 	public OutgoingText(String recipient, String subject, String messageContent,
 			Calendar scheduledDate, long gmtOffset) {
-		this(recipient, subject, messageContent, scheduledDate, Calendar.getInstance(), gmtOffset);
+		this(recipient, subject, messageContent, scheduledDate, Calendar
+				.getInstance(), gmtOffset);
 	}
 
 	public OutgoingText(String recipient, String subject, String messageContent,
@@ -45,8 +64,8 @@ public class OutgoingText implements Comparable {
 		this.gmtOffset = gmtOffset;
 	}
 
-	public OutgoingText updateText(String recipient, String subject, String messageContent,
-			Calendar scheduledDate, long gmtOffset) {
+	public OutgoingText updateText(String recipient, String subject,
+			String messageContent, Calendar scheduledDate, long gmtOffset) {
 
 		this.recipient = recipient;
 		this.subject = subject;
@@ -60,35 +79,39 @@ public class OutgoingText implements Comparable {
 	}
 
 	public String getRecipient() {
-		return recipient;
+		return this.recipient;
 	}
 
 	public String getSubject() {
-		return subject;
+		return this.subject;
 	}
 
 	public String getMessageContent() {
-		return messageContent;
+		return this.messageContent;
 	}
 
 	public Calendar getScheduledDate() {
-		return scheduledDate;
+		return this.scheduledDate;
 	}
 
 	public Long getScheduledDateAsLong() {
-		return scheduledDate.getTimeInMillis();
+		return this.scheduledDate.getTimeInMillis();
 	}
 
 	public Calendar getModifiedDate() {
-		return modifiedDate;
+		return this.modifiedDate;
 	}
 
 	public Long getModifiedDateAsLong() {
-		return modifiedDate.getTimeInMillis();
+		return this.modifiedDate.getTimeInMillis();
 	}
 
 	public long getGmtOffset() {
-		return gmtOffset;
+		return this.gmtOffset;
+	}
+
+	public RECURRENCE getRecurrence() {
+		return this.recurrence;
 	}
 
 	//
@@ -97,7 +120,8 @@ public class OutgoingText implements Comparable {
 	// }
 
 	public int hashCode() {
-		return (super.hashCode() + this.scheduledDate.hashCode() + this.recipient.hashCode());
+		return (super.hashCode() + this.scheduledDate.hashCode() + this.recipient
+				.hashCode());
 	}
 
 	public String toString() {
@@ -121,8 +145,8 @@ public class OutgoingText implements Comparable {
 		return;
 	}
 
-	public int compareTo(Object other) {
-		OutgoingText otherText = (OutgoingText) other;
+	public int compareTo(OutgoingText other) {
+		OutgoingText otherText = other;
 		// if (this.toString().charAt(0) < otherText.toString().charAt(0)) {
 		// return (-1 * OutgoingText.sortAscending);
 		// } else
@@ -152,9 +176,11 @@ public class OutgoingText implements Comparable {
 		intent.putExtra("date", this.getScheduledDateAsLong());
 		intent.putExtra("modified", this.getModifiedDateAsLong());
 		intent.putExtra("key", this.getKey());
+		intent.putExtra("gmtOffset", this.getGmtOffset());
+		intent.putExtra("recurrence", this.getRecurrence());
+
 		intent.putExtra("setAlarm", setAlarm);
 		intent.putExtra("update", updateText);
-		intent.putExtra("gmtOffset", gmtOffset);
 		return intent;
 	}
 
@@ -165,10 +191,12 @@ public class OutgoingText implements Comparable {
 		long date = intent.getLongExtra("date", 0);
 		long modified = intent.getLongExtra("modified", 0);
 		long gmtOffset = intent.getLongExtra("gmtOffset", 0);
+		RECURRENCE recurrence = RECURRENCE.fromInt(intent.getIntExtra("recurrence", 0));
 		long key = intent.getLongExtra("key", -1);
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(date);
-		OutgoingText text = new OutgoingText(recipient, subject, body, cal, gmtOffset);
+		OutgoingText text = new OutgoingText(recipient, subject, body, cal,
+				gmtOffset);
 		text.setKey(key);
 		return text;
 	}
