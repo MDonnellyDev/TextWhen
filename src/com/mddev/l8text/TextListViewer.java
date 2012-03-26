@@ -157,38 +157,30 @@ public class TextListViewer extends Activity {
 		ActionBar actionBar = this.getActionBar();
 
 		Tab listTab = actionBar.newTab();
-		listTab.setTabListener(new ActionBar.TabListener() {
-
+		
+		TabListener tabListener = new ActionBar.TabListener() {
+			
 			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// no action
+				// TODO unselect?
 			}
-
+			
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				// TODO: Switch fragment to list mode
+				// TODO if(listTab) refreshFragment;				
 			}
-
+			
 			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// no action
+				// TODO Auto-generated method stub
+				
 			}
-		});
+		};
+		
+		listTab.setTabListener(tabListener);
 
 		listTab.setIcon(android.R.drawable.ic_menu_agenda);
 
 		Tab createTab = actionBar.newTab();
-		createTab.setTabListener(new ActionBar.TabListener() {
+		createTab.setTabListener(tabListener);
 
-			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// no action
-			}
-
-			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				// TODO Switch fragment to create mode
-			}
-
-			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// no action
-			}
-		});
 		createTab.setIcon(android.R.drawable.ic_input_add);
 
 		actionBar.addTab(listTab);
