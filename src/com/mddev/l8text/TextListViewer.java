@@ -160,18 +160,15 @@ public class TextListViewer extends Activity {
 		listTab.setTabListener(new ActionBar.TabListener() {
 
 			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// no action
 			}
 
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// TODO: Switch fragment to list mode
 			}
 
 			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// no action
 			}
 		});
 
@@ -181,18 +178,15 @@ public class TextListViewer extends Activity {
 		createTab.setTabListener(new ActionBar.TabListener() {
 
 			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// no action
 			}
 
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// TODO Switch fragment to create mode
 			}
 
 			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// no action
 			}
 		});
 		createTab.setIcon(android.R.drawable.ic_input_add);
