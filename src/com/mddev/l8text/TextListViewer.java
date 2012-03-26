@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.mddev.l8text.R;
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-
 
 public class TextListViewer extends Activity {
 	private static final int						MENU_ITEM						= Menu.FIRST;
@@ -150,6 +153,55 @@ public class TextListViewer extends Activity {
 		MenuItem menuItem = menu.add(groupId, MENU_ITEM, 0,
 				this.getString(R.string.btn_addNew));
 		menuItem.setIntent(new Intent(this, TextEditor.class));
+
+		ActionBar actionBar = this.getActionBar();
+
+		Tab listTab = actionBar.newTab();
+		listTab.setTabListener(new ActionBar.TabListener() {
+
+			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onTabSelected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onTabReselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		listTab.setIcon(android.R.drawable.ic_menu_agenda);
+
+		Tab createTab = actionBar.newTab();
+		createTab.setTabListener(new ActionBar.TabListener() {
+
+			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onTabSelected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void onTabReselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		createTab.setIcon(android.R.drawable.ic_input_add);
+
+		actionBar.addTab(listTab);
+		actionBar.addTab(createTab);
+
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 		return true;
 	}
 
@@ -163,8 +215,8 @@ public class TextListViewer extends Activity {
 
 		return true;
 	}
-	
-	public void onDestroy(){
+
+	public void onDestroy() {
 		super.onDestroy();
 	}
 }
