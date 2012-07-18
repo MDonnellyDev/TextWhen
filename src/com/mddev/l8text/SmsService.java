@@ -2,6 +2,7 @@ package com.mddev.l8text;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 
@@ -21,11 +22,15 @@ public class SmsService extends Service {
 		SmsManager sms = SmsManager.getDefault();
 
 		for (String recipient : text.getRecipient().split(",")) {
-			sms.sendTextMessage(recipient, null, text.getMessageContent(), null, null);
+//			sms.sendTextMessage(recipient, null, text.getMessageContent(), null, null);
+			
+			Uri uri = Uri.parse("smsto:" + recipient); 
+			Intent it = new Intent(Intent.ACTION_SENDTO, uri); 
+			it.putExtra("sms_body", text.getMessageContent());
+			startActivity(it);
+			
 		}
-		// sms.sendTextMessage(text.getRecipient(), null, text.getMessageContent(),
-		// null, null);
-
+		
 		return Service.START_NOT_STICKY;
 
 	}
