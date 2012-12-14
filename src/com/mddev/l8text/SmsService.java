@@ -1,6 +1,11 @@
 package com.mddev.l8text;
 
+import java.net.URI;
+import java.util.Date;
+
 import android.app.Service;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
@@ -22,13 +27,18 @@ public class SmsService extends Service {
 		SmsManager sms = SmsManager.getDefault();
 
 		for (String recipient : text.getRecipient().split(",")) {
-//			sms.sendTextMessage(recipient, null, text.getMessageContent(), null, null);
+			sms.sendTextMessage(recipient, null, text.getMessageContent(), null, null);
 			
-			Uri uri = Uri.parse("smsto:" + recipient); 
-			Intent it = new Intent(Intent.ACTION_SENDTO, uri); 
-			it.putExtra("sms_body", text.getMessageContent());
-			startActivity(it);
+			ContentValues cv = new ContentValues();
+
+			cv.put("address", recipient);
+			cv.put("date", (new Date()).getTime());
+			cv.put("type", 2);
+//			cv.put("subject", null);
+			cv.put("body", text.getMessageContent());
 			
+			
+			this.getContentResolver().insert(Uri.parse("content://sms/sent"), cv);
 		}
 		
 		return Service.START_NOT_STICKY;
