@@ -7,7 +7,7 @@ import android.content.Intent;
 
 public class OutgoingText implements Comparable<OutgoingText> {
 	static enum RECURRENCE {
-		NONE, DAILY, WEEKLY, MONTHLY, YEARLY;
+		NONE, DAILY, WEEKDAY, WEEKEND, WEEKLY, MONTHLY, YEARLY;
 
 		static RECURRENCE fromInt(int recurrence) {
 
@@ -17,10 +17,14 @@ public class OutgoingText implements Comparable<OutgoingText> {
 				case 1:
 					return DAILY;
 				case 2:
-					return WEEKLY;
+					return WEEKDAY;
 				case 3:
-					return MONTHLY;
+					return WEEKEND;
 				case 4:
+					return WEEKLY;
+				case 5:
+					return MONTHLY;
+				case 6:
 					return YEARLY;
 				default:
 					return NONE;
