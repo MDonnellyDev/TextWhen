@@ -168,8 +168,12 @@ public class OutgoingText implements Comparable<OutgoingText> {
 
 	// setAlarm : set or cancel alarm
 	// updateText : update already existing text
-	public Intent toIntent(Context context, boolean setAlarm, boolean updateText) {
-		Intent intent = new Intent(context, AlarmService.class);
+	public Intent toIntent(Context context, boolean setAlarm, boolean updateText,
+			Class<?> cls) {
+		if (cls == null) {
+			cls = AlarmService.class;
+		}
+		Intent intent = new Intent(context, cls);
 		intent.putExtra("recipient", this.getRecipient());
 		intent.putExtra("subject", this.getSubject());
 		intent.putExtra("body", this.getMessageContent());
@@ -191,7 +195,8 @@ public class OutgoingText implements Comparable<OutgoingText> {
 		long date = intent.getLongExtra("date", 0);
 		long modified = intent.getLongExtra("modified", 0);
 		long gmtOffset = intent.getLongExtra("gmtOffset", 0);
-		RECURRENCE recurrence = RECURRENCE.fromInt(intent.getIntExtra("recurrence", 0));
+		RECURRENCE recurrence = RECURRENCE.fromInt(intent.getIntExtra("recurrence",
+				0));
 		long key = intent.getLongExtra("key", -1);
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(date);
