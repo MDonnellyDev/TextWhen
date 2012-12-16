@@ -1,6 +1,8 @@
 package com.mddev.l8text;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +31,19 @@ public class OutgoingText implements Comparable<OutgoingText> {
 				default:
 					return NONE;
 			}
+		}
+
+		public static List<OutgoingText.RECURRENCE> recurrenceTypes() {
+			List<OutgoingText.RECURRENCE> recurrenceList = new ArrayList<OutgoingText.RECURRENCE>();
+			recurrenceList.add(NONE);
+			recurrenceList.add(DAILY);
+			// WEEKDAY and WEEKEND have no associated logic yet
+			// recurrenceList.add(WEEKDAY);
+			// recurrenceList.add(WEEKEND);
+			recurrenceList.add(WEEKLY);
+			recurrenceList.add(MONTHLY);
+			recurrenceList.add(YEARLY);
+			return recurrenceList;
 		}
 	};
 
