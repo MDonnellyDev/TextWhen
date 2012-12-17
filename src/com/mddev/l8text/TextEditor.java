@@ -62,6 +62,7 @@ public class TextEditor extends Activity {
 		cancelBtn = (Button) findViewById(R.id.ButtonCancel);
 		sendBtn = (Button) findViewById(R.id.ButtonSendNow);
 
+		//if "update" is set, use existing information for defaults on Edit screen
 		if (incomingIntent.getBooleanExtra("update", false)) {
 			editRecipient.setText(incomingIntent.getStringExtra("recipient"));
 			editBody.setText(incomingIntent.getStringExtra("body"));
@@ -104,14 +105,15 @@ public class TextEditor extends Activity {
 
 		sendBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				//if "update", remove existing db entry and replace
 				if (incomingIntent.getBooleanExtra("update", false)) {
 					OutgoingText text = OutgoingText.fromIntent(incomingIntent);
 					db.removeEntry(text.getKey());
 					Intent intent = text.toIntent(TextEditor.this, false, true);
 					startService(intent);
 					Calendar c = Calendar.getInstance();
-					text.updateText(text.recipient, text.subject, text.messageContent, c, c
-							.getTimeZone().getOffset(c.getTimeInMillis()));
+					text.updateText(text.getRecipient(), text.getSubject(), text.getMessageContent(), c, Long.valueOf(c
+							.getTimeZone().getOffset(c.getTimeInMillis())));
 					intent = text.toIntent(TextEditor.this, true, false);
 					startService(intent);
 				} else {
@@ -157,6 +159,7 @@ public class TextEditor extends Activity {
 						Intent passedIntent;
 						boolean update = incomingIntent.getBooleanExtra("update", false);
 						boolean setAlarm = incomingIntent.getBooleanExtra("setAlarm", true);
+						//if "update" remove previous db entry before scheduling an OutgoingText.
 						if (update) {
 							text.setKey(incomingIntent.getLongExtra("key", 0));
 							passedIntent = text.toIntent(TextEditor.this, false, update);
@@ -189,8 +192,8 @@ public class TextEditor extends Activity {
 							Intent intent = text.toIntent(TextEditor.this, false, true);
 							startService(intent);
 							Calendar c = Calendar.getInstance();
-							text.updateText(text.recipient, text.subject, text.messageContent, c, c
-									.getTimeZone().getOffset(c.getTimeInMillis()));
+							text.updateText(text.getRecipient(), text.getSubject(), text.getMessageContent(), c, Long.valueOf(c
+									.getTimeZone().getOffset(c.getTimeInMillis())));
 							intent = text.toIntent(TextEditor.this, true, false);
 							TextEditor.this.startService(intent);
 						} else {

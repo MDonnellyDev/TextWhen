@@ -12,7 +12,6 @@ public class OutgoingText implements Comparable<OutgoingText> {
 		NONE, DAILY, WEEKDAY, WEEKEND, WEEKLY, MONTHLY, YEARLY;
 
 		static RECURRENCE fromInt(int recurrence) {
-
 			switch (recurrence) {
 				case 0:
 					return NONE;
@@ -33,6 +32,10 @@ public class OutgoingText implements Comparable<OutgoingText> {
 			}
 		}
 
+		/**
+		 * Get a List of available Recurrence types.
+		 * @return
+		 */
 		public static List<OutgoingText.RECURRENCE> recurrenceTypes() {
 			List<OutgoingText.RECURRENCE> recurrenceList = new ArrayList<OutgoingText.RECURRENCE>();
 			recurrenceList.add(NONE);
@@ -51,16 +54,16 @@ public class OutgoingText implements Comparable<OutgoingText> {
 		PENDING, SENT, DELIVERED
 	};
 
-	String					recipient;
-	String					messageContent;
-	String					subject;
-	Calendar				scheduledDate;
-	Calendar				modifiedDate;
-	long						gmtOffset;
-	RECURRENCE			recurrence;
-	long						key;
-	DELIVERY_STATUS	status;
-	static int			sortAscending	= 1;
+	private String					recipient;
+	private String					messageContent;
+	private String					subject;
+	private Calendar				scheduledDate;
+	private Calendar				modifiedDate;
+	private long						gmtOffset;
+	private RECURRENCE			recurrence;
+	long										key;
+	private DELIVERY_STATUS	status;
+	private static int			sortAscending	= 1;
 
 	public OutgoingText(String recipient, String subject, String messageContent,
 			Calendar scheduledDate, long gmtOffset) {
@@ -70,87 +73,63 @@ public class OutgoingText implements Comparable<OutgoingText> {
 
 	public OutgoingText(String recipient, String subject, String messageContent,
 			Calendar scheduledDate, Calendar modifiedDate, long gmtOffset) {
-		this.recipient = recipient;
-		this.subject = subject;
-		this.messageContent = messageContent;
-		this.scheduledDate = scheduledDate;
-		this.recurrence = RECURRENCE.NONE;
+		this.setRecipient(recipient);
+		this.setSubject(subject);
+		this.setMessageContent(messageContent);
+		this.setScheduledDate(scheduledDate);
+		this.setRecurrence(RECURRENCE.NONE);
 		if (null == modifiedDate) {
 			modifiedDate = Calendar.getInstance();
 		} else {
-			this.modifiedDate = modifiedDate;
+			this.setModifiedDate(modifiedDate);
 		}
-		this.gmtOffset = gmtOffset;
+		this.setGmtOffset(gmtOffset);
 	}
 
+	/**
+	 * Update various parameters of an OutgoingText.  The object is not persisted to the db.
+	 * @param recipient
+	 * @param subject
+	 * @param messageContent
+	 * @param scheduledDate
+	 * @param gmtOffset
+	 * @return The updated object.
+	 */
 	public OutgoingText updateText(String recipient, String subject,
-			String messageContent, Calendar scheduledDate, long gmtOffset) {
+			String messageContent, Calendar scheduledDate, Long gmtOffset) {
 
-		this.recipient = recipient;
-		this.subject = subject;
-		this.messageContent = messageContent;
-		this.scheduledDate = scheduledDate;
-		this.recurrence = RECURRENCE.NONE;
-		this.modifiedDate = Calendar.getInstance();
-		this.gmtOffset = gmtOffset;
+		if (recipient != null)
+			this.setRecipient(recipient);
+		if (subject != null)
+			this.setSubject(subject);
+		if (messageContent != null)
+			this.setMessageContent(messageContent);
+		if (scheduledDate != null)
+			this.setScheduledDate(scheduledDate);
+		this.setRecurrence(RECURRENCE.NONE);
+		this.setModifiedDate(Calendar.getInstance());
+		this.setGmtOffset(gmtOffset);
 		this.key = -1;
 		return this;
 	}
 
-	public String getRecipient() {
-		return this.recipient;
-	}
-
-	public String getSubject() {
-		return this.subject;
-	}
-
-	public String getMessageContent() {
-		return this.messageContent;
-	}
-
-	public Calendar getScheduledDate() {
-		return this.scheduledDate;
-	}
-
-	public Long getScheduledDateAsLong() {
-		return this.scheduledDate.getTimeInMillis();
-	}
-
-	public Calendar getModifiedDate() {
-		return this.modifiedDate;
-	}
-
-	public Long getModifiedDateAsLong() {
-		return this.modifiedDate.getTimeInMillis();
-	}
-
-	public long getGmtOffset() {
-		return this.gmtOffset;
-	}
-
-	public RECURRENCE getRecurrence() {
-		return this.recurrence;
-	}
-
-	//
-	// public void setGmtOffset(int gmtOffset) {
-	// this.gmtOffset = gmtOffset;
-	// }
-
 	public int hashCode() {
-		return (super.hashCode() + this.scheduledDate.hashCode() + this.recipient
-				.hashCode());
+		return (super.hashCode() + this.getScheduledDate().hashCode() + this
+				.getRecipient().hashCode());
 	}
 
+	/**
+	 * Text representation of OutgoingText object.
+	 * Uses Scheduled Date, Recipient, and MessageContent (up to 20 characters)
+	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.scheduledDate.getTime()).append(":\n");
-		sb.append(this.recipient).append('>');
-		if (messageContent.length() > 19) {
-			sb.append(messageContent.substring(0, 20));
+		sb.append(this.getScheduledDate().getTime()).append(":\n");
+		sb.append(this.getRecipient()).append('>');
+		if (getMessageContent().length() > 19) {
+			sb.append(getMessageContent().substring(0, 20));
 		} else {
-			sb.append(messageContent);
+			sb.append(getMessageContent());
 		}
 		return sb.toString();
 	}
@@ -170,23 +149,47 @@ public class OutgoingText implements Comparable<OutgoingText> {
 		// return (-1 * OutgoingText.sortAscending);
 		// } else
 		// return (1 * OutgoingText.sortAscending);
-		if (this.scheduledDate != null && otherText.scheduledDate != null) {
-			if (this.scheduledDate.before(otherText.scheduledDate))
-				return (-1 * OutgoingText.sortAscending);
-			else if (this.scheduledDate.after(otherText.scheduledDate))
-				return (1 * OutgoingText.sortAscending);
+		if (this.getScheduledDate() != null && otherText.getScheduledDate() != null) {
+			if (this.getScheduledDate().before(otherText.getScheduledDate()))
+				return (-1 * OutgoingText.getSortAscending());
+			else if (this.getScheduledDate().after(otherText.getScheduledDate()))
+				return (1 * OutgoingText.getSortAscending());
 		}
-		if (this.modifiedDate != null && otherText.modifiedDate != null) {
-			if (this.modifiedDate.before(otherText.modifiedDate))
-				return (-1 * OutgoingText.sortAscending);
-			else if (this.modifiedDate.before(otherText.modifiedDate))
-				return (1 * OutgoingText.sortAscending);
+		if (this.getModifiedDate() != null && otherText.getModifiedDate() != null) {
+			if (this.getModifiedDate().before(otherText.getModifiedDate()))
+				return (-1 * OutgoingText.getSortAscending());
+			else if (this.getModifiedDate().before(otherText.getModifiedDate()))
+				return (1 * OutgoingText.getSortAscending());
 		}
 		return 0;
 	}
+	
+	/**
+	 * Convert the OutgoingText object into an Intent
+	 * 
+	 * @param context
+	 * @param setAlarm
+	 *          <b>true</b> Sets the Alarm. <b>false</b> Cancels the Alarm.
+	 * @param updateText
+	 *          Updates an existing OutgoingText
+	 * @return
+	 */
+	public Intent toIntent(Context context, boolean setAlarm, boolean updateText) {
+		return this.toIntent(context, setAlarm, updateText, AlarmService.class);
+	}
 
-	// setAlarm : set or cancel alarm
-	// updateText : update already existing text
+	/**
+	 * Convert the OutgoingText object into an Intent
+	 * 
+	 * @param context
+	 * @param setAlarm
+	 *          <i>true</i> Sets the Alarm. <i>false</i> Cancels the Alarm.
+	 * @param updateText
+	 *          Updates an existing OutgoingText
+	 * @param cls
+	 *          Class to receive the Intent.
+	 * @return
+	 */
 	public Intent toIntent(Context context, boolean setAlarm, boolean updateText,
 			Class<?> cls) {
 		if (cls == null) {
@@ -207,6 +210,11 @@ public class OutgoingText implements Comparable<OutgoingText> {
 		return intent;
 	}
 
+	/**
+	 * Generates an OutgoingText object based on an Intent.
+	 * @param intent
+	 * @return
+	 */
 	public static OutgoingText fromIntent(Intent intent) {
 		String recipient = intent.getStringExtra("recipient");
 		String subject = intent.getStringExtra("subject");
@@ -223,6 +231,86 @@ public class OutgoingText implements Comparable<OutgoingText> {
 				gmtOffset);
 		text.setKey(key);
 		return text;
+	}
+
+	public String getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
+
+	public String getMessageContent() {
+		return messageContent;
+	}
+
+	public void setMessageContent(String messageContent) {
+		this.messageContent = messageContent;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public Calendar getScheduledDate() {
+		return scheduledDate;
+	}
+
+	public void setScheduledDate(Calendar scheduledDate) {
+		this.scheduledDate = scheduledDate;
+	}
+
+	public Long getScheduledDateAsLong() {
+		return this.scheduledDate.getTimeInMillis();
+	}
+
+	public Calendar getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Calendar modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public Long getModifiedDateAsLong() {
+		return this.modifiedDate.getTimeInMillis();
+	}
+
+	public long getGmtOffset() {
+		return gmtOffset;
+	}
+
+	public void setGmtOffset(long gmtOffset) {
+		this.gmtOffset = gmtOffset;
+	}
+
+	public RECURRENCE getRecurrence() {
+		return recurrence;
+	}
+
+	public void setRecurrence(RECURRENCE recurrence) {
+		this.recurrence = recurrence;
+	}
+
+	public DELIVERY_STATUS getStatus() {
+		return status;
+	}
+
+	public void setStatus(DELIVERY_STATUS status) {
+		this.status = status;
+	}
+
+	public static int getSortAscending() {
+		return sortAscending;
+	}
+
+	public static void setSortAscending(int sortAscending) {
+		OutgoingText.sortAscending = sortAscending;
 	}
 
 }

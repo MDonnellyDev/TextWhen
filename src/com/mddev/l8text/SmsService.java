@@ -1,5 +1,7 @@
 package com.mddev.l8text;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -21,11 +23,6 @@ public class SmsService extends Service {
 		OutgoingText text = null;
 
 		text = OutgoingText.fromIntent(intent);
-		TextDbAdapter db = new TextDbAdapter(this);
-
-		db.open();
-		db.removeEntry(db.getEntryRow(text));
-		db.close();
 
 		SmsManager sms = SmsManager.getDefault();
 
@@ -85,8 +82,29 @@ public class SmsService extends Service {
 					sentIntent, deliveryIntent);
 		}
 
-		return Service.START_NOT_STICKY;
 
+		
+		if(!text.getRecurrence().equals(OutgoingText.RECURRENCE.NONE)){
+			if(!rescheduleText(text)){
+				TextDbAdapter db = new TextDbAdapter(this);
+				db.open();
+				db.removeEntry(db.getEntryRow(text));
+				db.close();
+			}
+		}
+		
+		return Service.START_NOT_STICKY;
+	}
+
+	private boolean rescheduleText(OutgoingText text) {
+		Calendar newSchedule = TextRecurrence.getNextRecurrence(text.getScheduledDate(), text.getRecurrence());
+		if(newSchedule.equals(text.getScheduledDate())){
+			return false;			
+		}else{
+			text.updateText(null, null, null, newSchedule, null);
+			SmsService.this.startService(text.toIntent(SmsService.this, true, false));			
+			return true;
+		}
 	}
 
 	@Override
