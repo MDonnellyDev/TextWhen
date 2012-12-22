@@ -3,6 +3,7 @@ package com.mddev.l8text;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import com.mddev.l8text.R;
 
@@ -42,14 +43,13 @@ public class TextEditor extends Activity {
 	Bundle										savedInstanceState;
 
 	private static final int	CONTACT_PICKER_RESULT	= 1001;
-	private Date	scheduledDate;
-	private Time	scheduledTime;
+	private Calendar scheduledDate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Calendar c = Calendar.getInstance();
-		this.scheduledTime = new Time(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
-		this.scheduledDate = new Date(c.get(Calendar.YEAR), c.get(Calendar.MONTH),c.get(Calendar.DATE));
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.SECOND, 0);
+		this.scheduledDate = cal;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editview);
 		this.incomingIntent = this.getIntent();
@@ -75,23 +75,14 @@ public class TextEditor extends Activity {
 		cancelBtn = (Button) findViewById(R.id.ButtonCancel);
 		sendBtn = (Button) findViewById(R.id.ButtonSendNow);
 
-		Calendar cal = Calendar.getInstance();
 		if (incomingIntent.getBooleanExtra("update", false)) {
 			editRecipient.setText(incomingIntent.getStringExtra("recipient"));
 			editBody.setText(incomingIntent.getStringExtra("body"));
 			cal.setTimeInMillis(incomingIntent.getLongExtra("date", 0));
 		}
 
-		// datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-		// cal.get(Calendar.DAY_OF_MONTH));
-		// timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
-		// timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
-
-		timeView.setText(cal.get(Calendar.HOUR_OF_DAY) + ":"
-				+ cal.get(Calendar.MINUTE));
-		dateView.setText(cal.get(Calendar.MONTH) + "/"
-				+ cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR));
-
+		this.refreshDate(true, true);
+		
 		initializeButtons();
 	}
 
@@ -102,10 +93,14 @@ public class TextEditor extends Activity {
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-//		datePicker.updateDate(savedInstanceState.getInt("year"),
-//				savedInstanceState.getInt("month"), savedInstanceState.getInt("date"));
-//		timePicker.setCurrentHour(savedInstanceState.getInt("hour"));
-//		timePicker.setCurrentMinute(savedInstanceState.getInt("minute"));
+		Calendar cal = this.scheduledDate;
+		cal.set(Calendar.YEAR, savedInstanceState.getInt("year"));
+		cal.set(Calendar.MONTH, savedInstanceState.getInt("month"));
+		cal.set(Calendar.DATE, savedInstanceState.getInt("date"));
+		cal.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt("hour"));
+		cal.set(Calendar.MINUTE, savedInstanceState.getInt("minute"));
+		cal.set(Calendar.SECOND, 0);
+		this.refreshDate(true, true);
 		editBody.setText(savedInstanceState.getString("body"));
 		String recipient = editRecipient.getText().toString();
 		if (recipient.length() == 0) {
@@ -163,12 +158,7 @@ public class TextEditor extends Activity {
 			public void onClick(View v) {
 				if (editRecipient.getText() != null
 						&& editRecipient.getText().toString().length() >= 5) {
-					Calendar cal = Calendar.getInstance();
-//					cal.set(Calendar.HOUR_OF_DAY, datePicker.getYear());
-//					cal.set(Calendar.HOUR_OF_DAY, datePicker.getMonth());
-//					cal.set(Calendar.HOUR_OF_DAY, datePicker.getDayOfMonth());
-//					cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
-//					cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+					Calendar cal = scheduledDate;
 					cal.set(Calendar.SECOND, 0);
 					int gmtOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
 					if (cal.after(Calendar.getInstance())) {
@@ -304,11 +294,12 @@ public class TextEditor extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-//		savedInstanceState.putInt("month", datePicker.getMonth());
-//		savedInstanceState.putInt("date", datePicker.getDayOfMonth());
-//		savedInstanceState.putInt("year", datePicker.getYear());
-//		savedInstanceState.putInt("hour", timePicker.getCurrentHour());
-//		savedInstanceState.putInt("minute", timePicker.getCurrentMinute());
+		Calendar cal = this.scheduledDate;		
+		savedInstanceState.putInt("month", cal.get(Calendar.MONTH));
+		savedInstanceState.putInt("date", cal.get(Calendar.DATE));
+		savedInstanceState.putInt("year", cal.get(Calendar.YEAR));
+		savedInstanceState.putInt("hour", cal.get(Calendar.HOUR_OF_DAY));
+		savedInstanceState.putInt("minute", cal.get(Calendar.MINUTE));
 		savedInstanceState.putString("recipient", editRecipient.getText()
 				.toString());
 		savedInstanceState.putString("body", editBody.getText().toString());
@@ -327,23 +318,39 @@ public class TextEditor extends Activity {
 		DialogFragment newFragment = new DatePickerFragment();
 		newFragment.show(this.getFragmentManager(), "datePicker");
 	}
-
-	public void setDate(Date date) {
-		this.scheduledDate = date;		
-		dateView.setText(date.toString());
-	}
 	
-	public Date getDate(){
+	public Calendar getSchedule(){
 		return this.scheduledDate;
 	}
 	
-	public void setTime(Time time){
-		this.scheduledTime = time;
-		timeView.setText(time.toString());
+	public void refreshDate(boolean updateTime, boolean updateDate){
+		if(updateTime){
+			updateTimeText();
+		}
+		
+		if(updateDate){
+			updateDateText();			
+		}
 	}
 	
-	public Time getTime(){
-		return this.scheduledTime;
+	private void updateTimeText(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.scheduledDate.get(Calendar.HOUR_OF_DAY));
+		sb.append(":");
+		sb.append(this.scheduledDate.get(Calendar.MINUTE));
+		sb.append(" ");
+		sb.append(this.scheduledDate.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US));
+		this.timeView.setText(sb.toString());
+	}
+	
+	private void updateDateText(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.scheduledDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US));
+		sb.append(" ");
+		sb.append(this.scheduledDate.get(Calendar.DATE));
+		sb.append(", ");
+		sb.append(this.scheduledDate.get(Calendar.YEAR));	
+		this.dateView.setText(sb.toString());
 	}
 
 }

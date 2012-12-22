@@ -17,23 +17,23 @@ import android.widget.TimePicker;
 public class TimePickerFragment extends DialogFragment implements
 		OnTimeSetListener {
 	
-  private TextEditor	textEditor;
+  private TextEditor	textEditor = (TextEditor) this.getActivity();
 
 	@Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
 		textEditor = (TextEditor)this.getActivity();
-		Time t = textEditor.getTime();
+		Calendar cal = textEditor.getSchedule();
       // Create a new instance of TimePickerDialog and return it
-      return new TimePickerDialog(this.getActivity(), this, t.getHours(), t.getMinutes(),
+      return new TimePickerDialog(this.getActivity(), this, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),
               DateFormat.is24HourFormat(this.getActivity()));
   }
 
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		Calendar cal = textEditor.getSchedule();
+		cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		cal.set(Calendar.MINUTE, minute);
 		
-		Time t = new Time(hourOfDay, minute, 0);
-		
-		textEditor.setTime(t);
-		
+		textEditor.refreshDate(true, false);		
 	}
 
 }

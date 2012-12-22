@@ -22,17 +22,19 @@ public class DatePickerFragment extends DialogFragment implements
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		textEditor = (TextEditor) this.getActivity();
-		Date d = textEditor.getDate();
-		return new DatePickerDialog(this.getActivity(), 0, this, d.getYear(),
-				d.getMonth(), d.getDate());
+		Calendar cal = textEditor.getSchedule();
+		return new DatePickerDialog(this.getActivity(), 0, this,
+				cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 	}
 
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
+		Calendar cal = textEditor.getSchedule();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, monthOfYear);
+		cal.set(Calendar.DATE, dayOfMonth);
 
-		Date d = new Date(year, monthOfYear, dayOfMonth);
-		textEditor.setDate(d);
-
+		textEditor.refreshDate(false, true);
 	}
 
 }
