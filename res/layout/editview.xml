@@ -3,25 +3,13 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+	
+	<RelativeLayout
+	    android:id="@+id/RecipientLayout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/TimeView" >
 
-	<CalendarView android:id="@+id/CalendarView1" 
-		android:layout_height="wrap_content" 
-		android:layout_width="wrap_content" 
-		android:layout_centerHorizontal="true"
-		android:layout_alignParentTop="true">
-	</CalendarView>
-	
-	<TimePicker android:id="@+id/TimePicker" 
-		android:layout_below="@+id/CalendarView1"
-		android:layout_height="wrap_content" 
-		android:layout_width="wrap_content" 
-		android:layout_centerHorizontal="true">
-	</TimePicker>
-	
-	<RelativeLayout android:id="@+id/RecipientLayout"
-		android:layout_below="@id/TimePicker"
-		android:layout_height="wrap_content"
-		android:layout_width="fill_parent">
 		<EditText android:id="@+id/EditTextRecipient"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
@@ -36,20 +24,13 @@
 			android:layout_width="wrap_content"
 			android:text="@string/btn_contactPicker">
 		</Button>
+
 	</RelativeLayout>
 			
-	<!--
-	<EditText android:id="@+id/EditTextSubject" 
-		android:layout_below="@id/RecipientLayout" 
-		android:layout_height="wrap_content"
-		android:layout_width="fill_parent" 
-		android:hint="@string/text_subject">
-	</EditText>
-		-->
 	<EditText android:id="@+id/EditTextBody" 
 		android:layout_below="@id/RecipientLayout" 
 		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content" 
+		android:layout_height="wrap_content"
 		android:layout_above="@+id/LinearLayoutButton" 
 		android:hint="@string/text_body" 
 		android:gravity="top">
@@ -59,7 +40,6 @@
 		android:layout_width="fill_parent" 
 		android:layout_alignParentBottom="true" 
 		android:layout_height="wrap_content">
-		
 		<Button android:id="@+id/ButtonAddNew" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" 
@@ -82,4 +62,29 @@
 			android:text="@string/btn_cancel">
 		</Button>
 	</LinearLayout>
+
+	<TextView
+	    android:id="@id/TimeView"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/DateView"
+	    android:clickable="true"
+	    android:onClick="showTimePickerDialog"
+	    android:singleLine="true"
+	    android:textSize="50sp" />
+
+	<TextView
+	    android:id="@+id/DateView"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:clickable="true"
+	    android:onClick="showDatePickerDialog"
+	    android:singleLine="true"
+	    android:textSize="50sp" />
+
 </RelativeLayout>
