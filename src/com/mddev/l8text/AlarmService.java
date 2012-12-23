@@ -29,7 +29,7 @@ public class AlarmService extends Service {
 
 		if (incomingIntent.getBooleanExtra("setAlarm", true)) {
 			alarmManager.set(AlarmManager.RTC_WAKEUP,
-					incomingIntent.getLongExtra("date", 0L), pendingIntent);
+					incomingIntent.getLongExtra("scheduleMillis", 0L), pendingIntent);
 		} else {
 			alarmManager.cancel(pendingIntent);
 		}

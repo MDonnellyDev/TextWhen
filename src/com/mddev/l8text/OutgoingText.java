@@ -149,7 +149,7 @@ public class OutgoingText implements Comparable<Object> {
 		intent.putExtra("recipient", this.getRecipient());
 		intent.putExtra("subject", this.getSubject());
 		intent.putExtra("body", this.getMessageContent());
-		intent.putExtra("date", this.getScheduledDateAsLong());
+		intent.putExtra("scheduleMillis", this.getScheduledDateAsLong());
 		intent.putExtra("modified", this.getModifiedDateAsLong());
 		intent.putExtra("key", this.getKey());
 		intent.putExtra("setAlarm", setAlarm);
@@ -162,7 +162,7 @@ public class OutgoingText implements Comparable<Object> {
 		String recipient = intent.getStringExtra("recipient");
 		String subject = intent.getStringExtra("subject");
 		String body = intent.getStringExtra("body");
-		long date = intent.getLongExtra("date", 0);
+		long date = intent.getLongExtra("scheduleMillis", 0);
 		long modified = intent.getLongExtra("modified", 0);
 		long gmtOffset = intent.getLongExtra("gmtOffset", 0);
 		long key = intent.getLongExtra("key", -1);
