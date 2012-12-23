@@ -115,10 +115,6 @@ public class TextDbAdapter {
 	}
 
 	public long getEntryRow(OutgoingText text) {
-		String recipient = text.getRecipient();
-		String sub = text.getSubject();
-		String message = text.getMessageContent();
-		Long date = text.getScheduledDateAsLong();
 		String where = KEY_RECIPIENT + " = '" + text.getRecipient() + "' AND " + KEY_SUBJECT
 				+ "= '" + text.getSubject() + "' OR " + KEY_SUBJECT + " IS NULL" + " AND " + KEY_BODY
 				+ "= '" + text.getMessageContent() + "' AND " + KEY_SCHEDULED + "= '"

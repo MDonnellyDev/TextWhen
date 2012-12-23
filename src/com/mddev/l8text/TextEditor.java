@@ -1,16 +1,12 @@
 package com.mddev.l8text;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import com.mddev.l8text.R;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,13 +15,10 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.view.Surface;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class TextEditor extends Activity {
@@ -43,7 +36,7 @@ public class TextEditor extends Activity {
 	Bundle										savedInstanceState;
 
 	private static final int	CONTACT_PICKER_RESULT	= 1001;
-	private Calendar scheduledDate;
+	private Calendar					scheduledDate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +75,7 @@ public class TextEditor extends Activity {
 		}
 
 		this.refreshDate(true, true);
-		
+
 		initializeButtons();
 	}
 
@@ -121,19 +114,19 @@ public class TextEditor extends Activity {
 				if (incomingIntent.getBooleanExtra("update", false)) {
 					OutgoingText text = OutgoingText.fromIntent(incomingIntent);
 					db.removeEntry(text.getKey());
-					Intent intent = text.toIntent(TextEditor.this, false, true);
+					Intent intent = text.toAlarmIntent(TextEditor.this, false, true);
 					startService(intent);
 					Calendar c = Calendar.getInstance();
 					text.updateText(text.recipient, text.subject, text.messageContent, c,
 							c.getTimeZone().getOffset(c.getTimeInMillis()));
-					intent = text.toIntent(TextEditor.this, true, false);
+					intent = text.toAlarmIntent(TextEditor.this, true, false);
 					startService(intent);
 				} else {
 					if (editRecipient.getText().toString().length() >= 5) {
 						OutgoingText text = new OutgoingText(editRecipient.getText()
 								.toString(), null, editBody.getText().toString(), Calendar
 								.getInstance(), 0);
-						Intent intent = text.toIntent(TextEditor.this, true, false);
+						Intent intent = text.toAlarmIntent(TextEditor.this, true, false);
 						startService(intent);
 					} else {
 						Toast.makeText(v.getContext(),
@@ -162,7 +155,6 @@ public class TextEditor extends Activity {
 					cal.set(Calendar.SECOND, 0);
 					int gmtOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
 					if (cal.after(Calendar.getInstance())) {
-						String s = editBody.getText().toString();
 						OutgoingText text = new OutgoingText(editRecipient.getText()
 								.toString(), null, editBody.getText().toString(), cal,
 								gmtOffset);
@@ -172,16 +164,17 @@ public class TextEditor extends Activity {
 						boolean setAlarm = incomingIntent.getBooleanExtra("setAlarm", true);
 						if (update) {
 							text.setKey(incomingIntent.getLongExtra("key", 0));
-							passedIntent = text.toIntent(TextEditor.this, false, update);
+							passedIntent = text.toAlarmIntent(TextEditor.this, false, update);
 							db.updateEntry(text, text.getKey());
 							TextEditor.this.startService(passedIntent);
 
-							passedIntent = text.toIntent(TextEditor.this, true, update);
+							passedIntent = text.toAlarmIntent(TextEditor.this, true, update);
 							TextEditor.this.startService(passedIntent);
 						} else {
 							long key = db.insertEntry(text);
 							text.setKey(key);
-							passedIntent = text.toIntent(TextEditor.this, setAlarm, update);
+							passedIntent = text.toAlarmIntent(TextEditor.this, setAlarm,
+									update);
 							TextEditor.this.startService(passedIntent);
 						}
 
@@ -199,19 +192,19 @@ public class TextEditor extends Activity {
 						if (incomingIntent.getBooleanExtra("update", false)) {
 							OutgoingText text = OutgoingText.fromIntent(incomingIntent);
 							db.removeEntry(text.getKey());
-							Intent intent = text.toIntent(TextEditor.this, false, true);
+							Intent intent = text.toAlarmIntent(TextEditor.this, false, true);
 							startService(intent);
 							Calendar c = Calendar.getInstance();
 							text.updateText(text.recipient, text.subject,
 									text.messageContent, c,
 									c.getTimeZone().getOffset(c.getTimeInMillis()));
-							intent = text.toIntent(TextEditor.this, true, false);
+							intent = text.toAlarmIntent(TextEditor.this, true, false);
 							TextEditor.this.startService(intent);
 						} else {
 							OutgoingText text = new OutgoingText(editRecipient.getText()
 									.toString(), null, editBody.getText().toString(), Calendar
 									.getInstance(), 0);
-							Intent intent = text.toIntent(TextEditor.this, true, false);
+							Intent intent = text.toAlarmIntent(TextEditor.this, true, false);
 							TextEditor.this.startService(intent);
 						}
 
@@ -294,7 +287,7 @@ public class TextEditor extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		Calendar cal = this.scheduledDate;		
+		Calendar cal = this.scheduledDate;
 		savedInstanceState.putInt("month", cal.get(Calendar.MONTH));
 		savedInstanceState.putInt("date", cal.get(Calendar.DATE));
 		savedInstanceState.putInt("year", cal.get(Calendar.YEAR));
@@ -318,38 +311,40 @@ public class TextEditor extends Activity {
 		DialogFragment newFragment = new DatePickerFragment();
 		newFragment.show(this.getFragmentManager(), "datePicker");
 	}
-	
-	public Calendar getSchedule(){
+
+	public Calendar getSchedule() {
 		return this.scheduledDate;
 	}
-	
-	public void refreshDate(boolean updateTime, boolean updateDate){
-		if(updateTime){
+
+	public void refreshDate(boolean updateTime, boolean updateDate) {
+		if (updateTime) {
 			updateTimeText();
 		}
-		
-		if(updateDate){
-			updateDateText();			
+
+		if (updateDate) {
+			updateDateText();
 		}
 	}
-	
-	private void updateTimeText(){
+
+	private void updateTimeText() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.scheduledDate.get(Calendar.HOUR_OF_DAY));
 		sb.append(":");
 		sb.append(this.scheduledDate.get(Calendar.MINUTE));
 		sb.append(" ");
-		sb.append(this.scheduledDate.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US));
+		sb.append(this.scheduledDate.getDisplayName(Calendar.AM_PM, Calendar.SHORT,
+				Locale.US));
 		this.timeView.setText(sb.toString());
 	}
-	
-	private void updateDateText(){
+
+	private void updateDateText() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.scheduledDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US));
+		sb.append(this.scheduledDate.getDisplayName(Calendar.MONTH, Calendar.SHORT,
+				Locale.US));
 		sb.append(" ");
 		sb.append(this.scheduledDate.get(Calendar.DATE));
 		sb.append(", ");
-		sb.append(this.scheduledDate.get(Calendar.YEAR));	
+		sb.append(this.scheduledDate.get(Calendar.YEAR));
 		this.dateView.setText(sb.toString());
 	}
 

@@ -1,10 +1,8 @@
 package com.mddev.l8text;
 
-import java.net.URI;
 import java.util.Date;
 
 import android.app.Service;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;

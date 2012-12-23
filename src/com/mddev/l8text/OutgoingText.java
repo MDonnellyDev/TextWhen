@@ -5,7 +5,7 @@ import java.util.Calendar;
 import android.content.Context;
 import android.content.Intent;
 
-public class OutgoingText implements Comparable {
+public class OutgoingText implements Comparable<Object> {
 	static enum RECURRENCE {
 		NONE, DAILY, WEEKLY, MONTHLY
 	};
@@ -144,7 +144,7 @@ public class OutgoingText implements Comparable {
 
 	// setAlarm : set or cancel alarm
 	// updateText : update already existing text
-	public Intent toIntent(Context context, boolean setAlarm, boolean updateText) {
+	public Intent toAlarmIntent(Context context, boolean setAlarm, boolean updateText) {
 		Intent intent = new Intent(context, AlarmService.class);
 		intent.putExtra("recipient", this.getRecipient());
 		intent.putExtra("subject", this.getSubject());
