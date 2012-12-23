@@ -87,11 +87,7 @@ public class TextEditor extends Activity {
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		Calendar cal = this.scheduledDate;
-		cal.set(Calendar.YEAR, savedInstanceState.getInt("year"));
-		cal.set(Calendar.MONTH, savedInstanceState.getInt("month"));
-		cal.set(Calendar.DATE, savedInstanceState.getInt("date"));
-		cal.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt("hour"));
-		cal.set(Calendar.MINUTE, savedInstanceState.getInt("minute"));
+		cal.setTimeInMillis(savedInstanceState.getLong("date"));
 		cal.set(Calendar.SECOND, 0);
 		this.refreshDate(true, true);
 		editBody.setText(savedInstanceState.getString("body"));
@@ -288,11 +284,7 @@ public class TextEditor extends Activity {
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		Calendar cal = this.scheduledDate;
-		savedInstanceState.putInt("month", cal.get(Calendar.MONTH));
-		savedInstanceState.putInt("date", cal.get(Calendar.DATE));
-		savedInstanceState.putInt("year", cal.get(Calendar.YEAR));
-		savedInstanceState.putInt("hour", cal.get(Calendar.HOUR_OF_DAY));
-		savedInstanceState.putInt("minute", cal.get(Calendar.MINUTE));
+		savedInstanceState.putLong("date", cal.getTimeInMillis());
 		savedInstanceState.putString("recipient", editRecipient.getText()
 				.toString());
 		savedInstanceState.putString("body", editBody.getText().toString());
