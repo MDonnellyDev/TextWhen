@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 import android.telephony.SmsManager;
+import android.widget.Toast;
 
 public class SmsService extends Service {
 
@@ -38,6 +39,9 @@ public class SmsService extends Service {
 			
 			this.getContentResolver().insert(Uri.parse("content://sms/sent"), cv);
 		}
+		
+		Toast.makeText(this.getBaseContext(), "A scheduled text has been sent.",
+				Toast.LENGTH_LONG).show();
 		
 		return Service.START_NOT_STICKY;
 
