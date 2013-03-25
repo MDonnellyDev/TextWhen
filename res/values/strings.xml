@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">L8Text</string>
-  <string name="app_editor">L8Text Editor</string>
+  <string name="app_name">TextWhen</string>
+  <string name="app_editor">TextWhen Editor</string>
 	<string name="text_recipient">Phone Number</string>
 	<string name="btn_contactPicker">Contacts</string>
 	<string name="text_subject">Message Subject</string>

@@ -39,30 +39,33 @@
 	<LinearLayout android:id="@+id/LinearLayoutButton" 
 		android:layout_width="fill_parent" 
 		android:layout_alignParentBottom="true" 
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		style="?android:attr/buttonBarStyle">
 		<Button android:id="@+id/ButtonAddNew" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" 
 			android:layout_weight="1" 
 			android:layout_gravity="bottom" 
-			android:text="@string/btn_addNew">
+			android:text="@string/btn_addNew"
+			style="?android:attr/buttonBarButtonStyle">
 		</Button>
 		<Button android:id="@+id/ButtonSendNow" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" 
 			android:layout_weight="1" 
 			android:layout_gravity="bottom" 
-			android:text="@string/btn_sendNow">
+			android:text="@string/btn_sendNow"
+			style="?android:attr/buttonBarButtonStyle">
 		</Button>
 		<Button android:id="@+id/ButtonCancel" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" 
 			android:layout_weight="1" 
 			android:layout_gravity="bottom" 
-			android:text="@string/btn_cancel">
+			android:text="@string/btn_cancel"
+			style="?android:attr/buttonBarButtonStyle">
 		</Button>
 	</LinearLayout>
-
 	<TextView
 	    android:id="@id/TimeView"
 	    android:layout_width="wrap_content"

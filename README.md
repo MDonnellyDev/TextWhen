@@ -1,4 +1,4 @@
-L8Text
+TextWhen
 ======
 Basic text message scheduling application for Android.  (Name subject to change)
 

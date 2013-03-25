@@ -13,7 +13,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="17" />
 
     <application
         android:icon="@drawable/icon"
@@ -40,14 +40,14 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.mtd.textwhen.SmsService" >
+        <service android:name="com.mtd.textwhen.SmsService">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.EMBED" />
             </intent-filter>
         </service>
-        <service android:name="com.mtd.textwhen.AlarmService" >
+        <service android:name="com.mtd.textwhen.AlarmService">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +57,7 @@
 
         <receiver android:name="com.mtd.textwhen.TextAlarmReceiver" >
             <intent-filter>
-                <action android:name="com.mddev.l8text.ACTION_SCHEDULED_ALARM_TEXT" />
+                <action android:name="com.mtd.textwhen.ACTION_SCHEDULED_ALARM_TEXT" />
             </intent-filter>
         </receiver>
     </application>

@@ -7,7 +7,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text='@string/instruction_text'
-		android:textSize="18dp">
+		android:textSize="18sp">
 	</TextView>
 	<ListView android:id="@+id/scheduledView"
 		android:layout_width="fill_parent" 
