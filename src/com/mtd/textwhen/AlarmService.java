@@ -1,4 +1,4 @@
-package com.mddev.l8text;
+package com.mtd.textwhen;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

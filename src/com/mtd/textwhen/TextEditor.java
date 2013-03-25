@@ -1,9 +1,9 @@
-package com.mddev.l8text;
+package com.mtd.textwhen;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-import com.mddev.l8text.R;
+import com.mtd.textwhen.R;
 
 import android.app.Activity;
 import android.app.DialogFragment;

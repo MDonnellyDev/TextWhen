@@ -1,4 +1,4 @@
-package com.mddev.l8text;
+package com.mtd.textwhen;
 
 import java.sql.Time;
 import java.util.Calendar;

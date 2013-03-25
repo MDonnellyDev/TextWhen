@@ -1,4 +1,4 @@
-package com.mddev.l8text;
+package com.mtd.textwhen;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

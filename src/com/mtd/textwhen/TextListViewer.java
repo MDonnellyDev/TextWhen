@@ -1,8 +1,8 @@
-package com.mddev.l8text;
+package com.mtd.textwhen;
 
 import java.util.List;
 
-import com.mddev.l8text.R;
+import com.mtd.textwhen.R;
 
 import android.app.Activity;
 import android.content.Intent;
