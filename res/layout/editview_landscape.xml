@@ -1,80 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:isScrollContainer="true">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-	<DatePicker android:id="@+id/DatePicker" 
-		android:layout_height="wrap_content" 
-		android:layout_width="wrap_content" 
-		android:layout_alignParentTop="true">
-	</DatePicker>
-	
-	<TimePicker android:id="@+id/TimePicker" 
-		android:layout_toRightOf="@id/DatePicker" 
-		android:layout_alignParentRight="true"
-		android:layout_height="wrap_content" 
-		android:layout_width="wrap_content" >
-	</TimePicker>
-	
-	<RelativeLayout android:id="@+id/RecipientLayout"
-		android:layout_below="@id/TimePicker"
-		android:layout_height="wrap_content"
-		android:layout_width="fill_parent">
-		<EditText android:id="@+id/EditTextRecipient"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:layout_alignParentLeft="true"
-			android:layout_toLeftOf="@+id/ContactPicker"
-			android:hint="@string/text_recipient" android:layout_toRightOf="@id/EditTextRecipient">
-		</EditText>
-		
-		<Button android:id="@id/ContactPicker"
-			android:layout_alignParentRight="true"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:text="@string/btn_contactPicker">
-		</Button>
-	</RelativeLayout>
-	
-	<EditText android:id="@+id/EditTextBody" 
-		android:layout_below="@id/RecipientLayout" 
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content" 
-		android:layout_above="@+id/LinearLayoutButton" 
-		android:hint="@string/text_body" 
-		android:gravity="top">
-	</EditText>
+    <RelativeLayout
+        android:id="@+id/RecipientLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/EditTextBody"
+        android:layout_below="@+id/TimeView" >
+    </RelativeLayout>
 
-	<LinearLayout android:id="@+id/LinearLayoutButton" 
-		android:layout_width="fill_parent" 
-		android:layout_alignParentBottom="true" 
-		android:layout_height="wrap_content"
-		style="?android:attr/buttonBarStyle">
-		
-		<Button android:id="@+id/ButtonAddNew" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:layout_weight="1" 
-			android:layout_gravity="bottom" 
-			android:text="@string/btn_addNew"
-			style="?android:attr/buttonBarButtonStyle">
-		</Button>
-		<Button android:id="@+id/ButtonSendNow" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:layout_weight="1" 
-			android:layout_gravity="bottom" 
-			android:text="@string/btn_sendNow"
-			style="?android:attr/buttonBarButtonStyle">
-		</Button>
-		<Button android:id="@+id/ButtonCancel" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:layout_weight="1" 
-			android:layout_gravity="bottom" 
-			android:text="@string/btn_cancel"
-			style="?android:attr/buttonBarButtonStyle">
-		</Button>
-	</LinearLayout>
+    <EditText
+        android:id="@+id/EditTextBody"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/EditTextRecipient"
+        android:layout_toLeftOf="@+id/LinearLayout1"
+        android:gravity="top"
+        android:hint="@string/text_body_hint" 
+        >
+
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/TimeView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/EditTextBody"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/ButtonCancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_cancel_landscape" />
+
+        <Button
+            android:id="@+id/ButtonSendNow"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_sendNow_landscape" />
+
+        <Button
+            android:id="@+id/ButtonAddNew"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_addNew_landscape" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/DateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/RecipientLayout"
+        android:clickable="true"
+        android:hint="@string/date_hint"
+        android:onClick="showDatePickerDialog"
+        android:singleLine="true"
+        android:textIsSelectable="false"
+        android:textSize="50sp" />
+
+    <Button
+        android:id="@id/ContactPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/EditTextBody"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/DateView"
+        android:text="@string/btn_contactPicker" />
+
+    <TextView
+        android:id="@id/TimeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ContactPicker"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:hint="@string/time_hint"
+        android:onClick="showTimePickerDialog"
+        android:singleLine="true"
+        android:textIsSelectable="false"
+        android:textSize="50sp" />
+
+    <EditText
+        android:id="@+id/EditTextRecipient"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/DateView"
+        android:layout_toLeftOf="@id/ContactPicker"
+        android:ems="10"
+        android:hint="@string/text_recipient_hint" >
+
+        <requestFocus />
+    </EditText>
+
 </RelativeLayout>

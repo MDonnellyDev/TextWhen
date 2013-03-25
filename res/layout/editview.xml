@@ -15,7 +15,8 @@
 			android:layout_width="fill_parent"
 			android:layout_alignParentLeft="true"
 			android:layout_toLeftOf="@+id/ContactPicker"
-			android:hint="@string/text_recipient" android:layout_toRightOf="@id/EditTextRecipient">
+			android:hint="@string/text_recipient_hint"
+			android:layout_toRightOf="@id/EditTextRecipient">
 		</EditText>
 		
 		<Button android:id="@id/ContactPicker"
@@ -32,7 +33,7 @@
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
 		android:layout_above="@+id/LinearLayoutButton" 
-		android:hint="@string/text_body" 
+		android:hint="@string/text_body_hint" 
 		android:gravity="top">
 	</EditText>
 
@@ -76,6 +77,8 @@
 	    android:clickable="true"
 	    android:onClick="showTimePickerDialog"
 	    android:singleLine="true"
+		android:hint="@string/time_hint" 
+		android:textIsSelectable="false"
 	    android:textSize="50sp" />
 
 	<TextView
@@ -88,6 +91,8 @@
 	    android:clickable="true"
 	    android:onClick="showDatePickerDialog"
 	    android:singleLine="true"
+		android:hint="@string/date_hint" 
+		android:textIsSelectable="false"
 	    android:textSize="50sp" />
 
 </RelativeLayout>

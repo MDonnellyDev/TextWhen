@@ -2,16 +2,21 @@
 <resources>
   <string name="app_name">TextWhen</string>
   <string name="app_editor">TextWhen Editor</string>
-	<string name="text_recipient">Phone Number</string>
+	<string name="text_recipient_hint">Phone Number</string>
 	<string name="btn_contactPicker">Contacts</string>
-	<string name="text_subject">Message Subject</string>
-	<string name="text_body">Message Body</string>
+	<string name="text_subject_hint">Message Subject</string>
+	<string name="text_body_hint">Message Body</string>
 	<string name="btn_addNew">Queue New Text</string>
 	<string name="btn_sendNow">Send Text Now</string>
 	<string name="btn_cancel">Cancel Entry</string>
+	<string name="btn_addNew_landscape">Queue</string>
+	<string name="btn_sendNow_landscape">Send Now</string>
+	<string name="btn_cancel_landscape">Cancel</string>
 	<string name="context_delete">Cancel Text</string>
 	<string name="context_edit">Edit Text</string>
 	<string name="instruction_text">Press Menu to Create a New Text</string>
 	<string name="name">Name</string>
 	<string name="description">Description</string>
+	<string name="date_hint">Enter Date</string>
+	<string name="time_hint">Enter Time</string>
 </resources>
