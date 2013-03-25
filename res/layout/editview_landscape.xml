@@ -20,9 +20,7 @@
         android:layout_below="@+id/EditTextRecipient"
         android:layout_toLeftOf="@+id/LinearLayout1"
         android:gravity="top"
-        android:hint="@string/text_body_hint" 
-        >
-
+        android:hint="@string/text_body_hint" >
     </EditText>
 
     <LinearLayout
@@ -35,14 +33,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/EditTextBody"
         android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/ButtonCancel"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btn_cancel_landscape" />
 
         <Button
             android:id="@+id/ButtonSendNow"
@@ -60,6 +50,13 @@
             android:layout_weight="1"
             android:text="@string/btn_addNew_landscape" />
 
+        <Button
+            android:id="@+id/ButtonCancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_cancel_landscape" />
     </LinearLayout>
 
     <TextView
