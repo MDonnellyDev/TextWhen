@@ -320,7 +320,7 @@ public class TextEditor extends Activity {
 
 	private void updateTimeText() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.scheduledDate.get(Calendar.HOUR_OF_DAY));
+		sb.append(this.scheduledDate.get(Calendar.HOUR));
 		sb.append(":");
 		sb.append(this.scheduledDate.get(Calendar.MINUTE));
 		sb.append(" ");
