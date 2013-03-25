@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TextEditor extends Activity {
-	TextDbAdapter							db;
+	TextDbAdapter								db;
 	TextView									dateView;
 	TextView									timeView;
 	Button										newBtn;
@@ -51,7 +51,7 @@ public class TextEditor extends Activity {
 			db.open();
 		}
 		int rotation = ((WindowManager) getSystemService(WINDOW_SERVICE))
-				.getDefaultDisplay().getOrientation();
+				.getDefaultDisplay().getRotation();
 		if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
 			setContentView(R.layout.editview);
 		} else {
