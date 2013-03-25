@@ -2,14 +2,15 @@ TextWhen
 ======
 Basic text message scheduling application for Android.  (Name subject to change)
 
-
-This is my first legitimate Android application development effort (although I am not able to dedicate much time to the project).  It is intended for personal use only.
-
-Please do not hold me responsible if you try this application and it does not function as expected.
+This is a very basic utility, with no frills--ain't nobody got time fo' dat.
 
 This came out of a personal need:
 I can schedule happy birthday texts for some date in the future.
-I can set a reminder text for later in the day or the next morning. (a coworker: "remind me to bring that DVD in for you tomorrow morning...")
+Remind someone of something, at an appropriate time.
+-("Don't forget to bring that DVD in tomorrow morning!" can be delivered "tomorrow morning")
+
+More details to follow.  Comments, suggestions, and ideas are always welcome.
 
 
-More details to follow.  Suggestions are welcome, of course.
+Note: I may not be held responsible if this application does not behave as expected.
+I offer no guarantees of functionality or reliability.
