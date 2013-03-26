@@ -22,21 +22,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TextEditor extends Activity {
-	TextDbAdapter								db;
-	TextView									dateView;
-	TextView									timeView;
-	Button										newBtn;
-	Button										contactPickerBtn;
-	Button										sendBtn;
-	Button										cancelBtn;
-	EditText									editRecipient;
-	EditText									editSubject;
-	EditText									editBody;
-	Intent										incomingIntent;
-	Bundle										savedInstanceState;
+	TextDbAdapter db;
+	TextView dateView;
+	TextView timeView;
+	Button newBtn;
+	Button contactPickerBtn;
+	Button sendBtn;
+	Button cancelBtn;
+	EditText editRecipient;
+	EditText editSubject;
+	EditText editBody;
+	Intent incomingIntent;
+	Bundle savedInstanceState;
 
-	private static final int	CONTACT_PICKER_RESULT	= 1001;
-	private Calendar					scheduledDate;
+	private static final int CONTACT_PICKER_RESULT = 1001;
+	private Calendar scheduledDate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,24 +110,27 @@ public class TextEditor extends Activity {
 				if (incomingIntent.getBooleanExtra("update", false)) {
 					OutgoingText text = OutgoingText.fromIntent(incomingIntent);
 					db.removeEntry(text.getKey());
-					Intent intent = text.toAlarmIntent(TextEditor.this, false, true);
+					Intent intent = text.toAlarmIntent(TextEditor.this, false,
+							true);
 					startService(intent);
 					Calendar c = Calendar.getInstance();
-					text.updateText(text.recipient, text.subject, text.messageContent, c,
+					text.updateText(text.recipient, text.subject,
+							text.messageContent, c,
 							c.getTimeZone().getOffset(c.getTimeInMillis()));
 					intent = text.toAlarmIntent(TextEditor.this, true, false);
 					startService(intent);
 				} else {
 					if (editRecipient.getText().toString().length() >= 5) {
-						OutgoingText text = new OutgoingText(editRecipient.getText()
-								.toString(), null, editBody.getText().toString(), Calendar
-								.getInstance(), 0);
-						Intent intent = text.toAlarmIntent(TextEditor.this, true, false);
+						OutgoingText text = new OutgoingText(editRecipient
+								.getText().toString(), null, editBody.getText()
+								.toString(), Calendar.getInstance(), 0);
+						Intent intent = text.toAlarmIntent(TextEditor.this,
+								true, false);
 						startService(intent);
 					} else {
 						Toast.makeText(v.getContext(),
-								"Please check the recipient field again.", Toast.LENGTH_LONG)
-								.show();
+								"Please check the recipient field again.",
+								Toast.LENGTH_LONG).show();
 					}
 				}
 
@@ -139,7 +142,8 @@ public class TextEditor extends Activity {
 			public void onClick(View v) {
 				Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
 						Contacts.CONTENT_URI);
-				startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
+				startActivityForResult(contactPickerIntent,
+						CONTACT_PICKER_RESULT);
 			}
 		});
 
@@ -149,58 +153,70 @@ public class TextEditor extends Activity {
 						&& editRecipient.getText().toString().length() >= 5) {
 					Calendar cal = scheduledDate;
 					cal.set(Calendar.SECOND, 0);
-					int gmtOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
+					int gmtOffset = cal.getTimeZone().getOffset(
+							cal.getTimeInMillis());
 					if (cal.after(Calendar.getInstance())) {
-						OutgoingText text = new OutgoingText(editRecipient.getText()
-								.toString(), null, editBody.getText().toString(), cal,
-								gmtOffset);
+						OutgoingText text = new OutgoingText(editRecipient
+								.getText().toString(), null, editBody.getText()
+								.toString(), cal, gmtOffset);
 
 						Intent passedIntent;
-						boolean update = incomingIntent.getBooleanExtra("update", false);
-						boolean setAlarm = incomingIntent.getBooleanExtra("setAlarm", true);
+						boolean update = incomingIntent.getBooleanExtra(
+								"update", false);
+						boolean setAlarm = incomingIntent.getBooleanExtra(
+								"setAlarm", true);
 						if (update) {
 							text.setKey(incomingIntent.getLongExtra("key", 0));
-							passedIntent = text.toAlarmIntent(TextEditor.this, false, update);
+							passedIntent = text.toAlarmIntent(TextEditor.this,
+									false, update);
 							db.updateEntry(text, text.getKey());
 							TextEditor.this.startService(passedIntent);
 
-							passedIntent = text.toAlarmIntent(TextEditor.this, true, update);
+							passedIntent = text.toAlarmIntent(TextEditor.this,
+									true, update);
 							TextEditor.this.startService(passedIntent);
 						} else {
 							long key = db.insertEntry(text);
 							text.setKey(key);
-							passedIntent = text.toAlarmIntent(TextEditor.this, setAlarm,
-									update);
+							passedIntent = text.toAlarmIntent(TextEditor.this,
+									setAlarm, update);
 							TextEditor.this.startService(passedIntent);
 						}
 
-						Toast.makeText(v.getContext(), "Saved Message: " + text.toString(),
+						Toast.makeText(v.getContext(),
+								"Saved Message: " + text.toString(),
 								Toast.LENGTH_LONG).show();
 
 						TextEditor.this.finish();
 
 					} else {
 
-						Toast.makeText(v.getContext(),
+						Toast.makeText(
+								v.getContext(),
 								"Sending immediately--time or date has passed already.",
 								Toast.LENGTH_LONG).show();
 
 						if (incomingIntent.getBooleanExtra("update", false)) {
-							OutgoingText text = OutgoingText.fromIntent(incomingIntent);
+							OutgoingText text = OutgoingText
+									.fromIntent(incomingIntent);
 							db.removeEntry(text.getKey());
-							Intent intent = text.toAlarmIntent(TextEditor.this, false, true);
+							Intent intent = text.toAlarmIntent(TextEditor.this,
+									false, true);
 							startService(intent);
 							Calendar c = Calendar.getInstance();
 							text.updateText(text.recipient, text.subject,
-									text.messageContent, c,
-									c.getTimeZone().getOffset(c.getTimeInMillis()));
-							intent = text.toAlarmIntent(TextEditor.this, true, false);
+									text.messageContent, c, c.getTimeZone()
+											.getOffset(c.getTimeInMillis()));
+							intent = text.toAlarmIntent(TextEditor.this, true,
+									false);
 							TextEditor.this.startService(intent);
 						} else {
-							OutgoingText text = new OutgoingText(editRecipient.getText()
-									.toString(), null, editBody.getText().toString(), Calendar
+							OutgoingText text = new OutgoingText(editRecipient
+									.getText().toString(), null, editBody
+									.getText().toString(), Calendar
 									.getInstance(), 0);
-							Intent intent = text.toAlarmIntent(TextEditor.this, true, false);
+							Intent intent = text.toAlarmIntent(TextEditor.this,
+									true, false);
 							TextEditor.this.startService(intent);
 						}
 
@@ -209,11 +225,10 @@ public class TextEditor extends Activity {
 
 				} else {
 
-					Toast
-							.makeText(
-									v.getContext(),
-									"Message cannot be saved as is.  Please ensure date, time, recipient, and message are filled in.",
-									Toast.LENGTH_LONG).show();
+					Toast.makeText(
+							v.getContext(),
+							"Message cannot be saved as is.  Please ensure date, time, recipient, and message are filled in.",
+							Toast.LENGTH_LONG).show();
 				}
 			}
 
@@ -224,44 +239,49 @@ public class TextEditor extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
-				case CONTACT_PICKER_RESULT:
-					Cursor cursor = null;
-					String phone = "";
-					try {
-						Uri result = data.getData();
+			case CONTACT_PICKER_RESULT:
+				Cursor cursor = null;
+				String phone = "";
+				try {
+					Uri result = data.getData();
 
-						// get the contact id from the Uri
-						String id = result.getLastPathSegment();
+					// get the contact id from the Uri
+					String id = result.getLastPathSegment();
 
-						// query for mobile phone
-						cursor = getContentResolver().query(Phone.CONTENT_URI, null,
-								Phone.CONTACT_ID + "=?" + "AND " + Phone.TYPE + "=?",
-								new String[] { id, String.valueOf(Phone.TYPE_MOBILE) }, null);
+					// query for mobile phone
+					cursor = getContentResolver().query(
+							Phone.CONTENT_URI,
+							null,
+							Phone.CONTACT_ID + "=?" + "AND " + Phone.TYPE
+									+ "=?",
+							new String[] { id,
+									String.valueOf(Phone.TYPE_MOBILE) }, null);
 
-						int phoneIdx = cursor.getColumnIndex(Phone.NUMBER);
+					int phoneIdx = cursor.getColumnIndex(Phone.NUMBER);
 
-						if (cursor.moveToFirst()) {
-							phone = cursor.getString(phoneIdx);
+					if (cursor.moveToFirst()) {
+						phone = cursor.getString(phoneIdx);
+					} else {
+					}
+				} catch (Exception e) {
+				} finally {
+					if (cursor != null) {
+						cursor.close();
+					}
+					if (phone.length() == 0) {
+						Toast.makeText(this,
+								"No phone number found for contact.",
+								Toast.LENGTH_LONG).show();
+					} else {
+						if (editRecipient.getText().toString().length() > 0) {
+							editRecipient.setText(editRecipient.getText()
+									.toString() + "," + phone);
 						} else {
-						}
-					} catch (Exception e) {
-					} finally {
-						if (cursor != null) {
-							cursor.close();
-						}
-						if (phone.length() == 0) {
-							Toast.makeText(this, "No phone number found for contact.",
-									Toast.LENGTH_LONG).show();
-						} else {
-							if (editRecipient.getText().toString().length() > 0) {
-								editRecipient.setText(editRecipient.getText().toString() + ","
-										+ phone);
-							} else {
-								editRecipient.setText(phone);
-							}
+							editRecipient.setText(phone);
 						}
 					}
-					break;
+				}
+				break;
 			}
 		}
 	}
@@ -322,17 +342,20 @@ public class TextEditor extends Activity {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.scheduledDate.get(Calendar.HOUR));
 		sb.append(":");
+		if (this.scheduledDate.get(Calendar.MINUTE) < 10) {
+			sb.append("0");
+		}
 		sb.append(this.scheduledDate.get(Calendar.MINUTE));
 		sb.append(" ");
-		sb.append(this.scheduledDate.getDisplayName(Calendar.AM_PM, Calendar.SHORT,
-				Locale.US));
+		sb.append(this.scheduledDate.getDisplayName(Calendar.AM_PM,
+				Calendar.SHORT, Locale.US));
 		this.timeView.setText(sb.toString());
 	}
 
 	private void updateDateText() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.scheduledDate.getDisplayName(Calendar.MONTH, Calendar.SHORT,
-				Locale.US));
+		sb.append(this.scheduledDate.getDisplayName(Calendar.MONTH,
+				Calendar.SHORT, Locale.US));
 		sb.append(" ");
 		sb.append(this.scheduledDate.get(Calendar.DATE));
 		sb.append(", ");
