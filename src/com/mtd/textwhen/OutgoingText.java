@@ -1,6 +1,7 @@
 package com.mtd.textwhen;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,24 +15,26 @@ public class OutgoingText implements Comparable<Object> {
 		PENDING, SENT, DELIVERED
 	};
 
-	String					recipient;
-	String					messageContent;
-	String					subject;
-	Calendar				scheduledDate;
-	Calendar				modifiedDate;
-	long						gmtOffset;
-	RECURRENCE			recurrence;
-	long						key;
-	DELIVERY_STATUS	status;
-	static int			sortAscending	= 1;
+	String recipient;
+	String messageContent;
+	String subject;
+	Calendar scheduledDate;
+	Calendar modifiedDate;
+	long gmtOffset;
+	RECURRENCE recurrence;
+	long key;
+	DELIVERY_STATUS status;
+	static int sortAscending = 1;
 
-	public OutgoingText(String recipient, String subject, String messageContent,
-			Calendar scheduledDate, long gmtOffset) {
-		this(recipient, subject, messageContent, scheduledDate, Calendar.getInstance(), gmtOffset);
+	public OutgoingText(String recipient, String subject,
+			String messageContent, Calendar scheduledDate, long gmtOffset) {
+		this(recipient, subject, messageContent, scheduledDate, Calendar
+				.getInstance(), gmtOffset);
 	}
 
-	public OutgoingText(String recipient, String subject, String messageContent,
-			Calendar scheduledDate, Calendar modifiedDate, long gmtOffset) {
+	public OutgoingText(String recipient, String subject,
+			String messageContent, Calendar scheduledDate,
+			Calendar modifiedDate, long gmtOffset) {
 		this.recipient = recipient;
 		this.subject = subject;
 		this.messageContent = messageContent;
@@ -45,8 +48,8 @@ public class OutgoingText implements Comparable<Object> {
 		this.gmtOffset = gmtOffset;
 	}
 
-	public OutgoingText updateText(String recipient, String subject, String messageContent,
-			Calendar scheduledDate, long gmtOffset) {
+	public OutgoingText updateText(String recipient, String subject,
+			String messageContent, Calendar scheduledDate, long gmtOffset) {
 
 		this.recipient = recipient;
 		this.subject = subject;
@@ -97,12 +100,18 @@ public class OutgoingText implements Comparable<Object> {
 	// }
 
 	public int hashCode() {
-		return (super.hashCode() + this.scheduledDate.hashCode() + this.recipient.hashCode());
+		return (super.hashCode() + this.scheduledDate.hashCode() + this.recipient
+				.hashCode());
 	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.scheduledDate.getTime()).append(":\n");
+		sb.append(
+				this.scheduledDate.getDisplayName(Calendar.DAY_OF_WEEK,
+						Calendar.SHORT, Locale.US)).append(" ");
+		sb.append(this.scheduledDate.get(Calendar.YEAR)).append("-");
+		sb.append(this.scheduledDate.get(Calendar.MONTH)).append("-");
+		sb.append(this.scheduledDate.get(Calendar.DATE)).append(":\n");
 		sb.append(this.recipient).append('>');
 		if (messageContent.length() > 19) {
 			sb.append(messageContent.substring(0, 20));
@@ -144,7 +153,8 @@ public class OutgoingText implements Comparable<Object> {
 
 	// setAlarm : set or cancel alarm
 	// updateText : update already existing text
-	public Intent toAlarmIntent(Context context, boolean setAlarm, boolean updateText) {
+	public Intent toAlarmIntent(Context context, boolean setAlarm,
+			boolean updateText) {
 		Intent intent = new Intent(context, AlarmService.class);
 		intent.putExtra("recipient", this.getRecipient());
 		intent.putExtra("subject", this.getSubject());
@@ -168,7 +178,8 @@ public class OutgoingText implements Comparable<Object> {
 		long key = intent.getLongExtra("key", -1);
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(date);
-		OutgoingText text = new OutgoingText(recipient, subject, body, cal, gmtOffset);
+		OutgoingText text = new OutgoingText(recipient, subject, body, cal,
+				gmtOffset);
 		text.setKey(key);
 		return text;
 	}
