@@ -9,29 +9,31 @@
         android:id="@+id/text_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/view_btn_delete"
+        android:layout_alignBottom="@+id/text_btn_delete"
         android:layout_alignParentLeft="true"
-        android:layout_alignTop="@id/view_btn_delete"
-        android:layout_toLeftOf="@id/view_btn_delete"
+        android:layout_alignTop="@id/text_btn_delete"
+        android:layout_toLeftOf="@id/text_btn_delete"
         android:textIsSelectable="true" >
     </TextView>
 
     <ImageButton
-        android:id="@id/view_btn_delete"
+        android:id="@id/text_btn_delete"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignTop="@+id/view_btn_edit"
-        android:layout_toLeftOf="@id/view_btn_edit"
-        android:contentDescription="@string/view_edit"
+        android:layout_alignTop="@+id/text_btn_edit"
+        android:layout_toLeftOf="@id/text_btn_edit"
+        android:contentDescription="@string/text_cancel"
+        android:onClick="cancelTextButton"
         android:src="@android:drawable/ic_menu_delete" />
 
     <ImageButton
-        android:id="@id/view_btn_edit"
+        android:id="@id/text_btn_edit"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/view_cancel"
+        android:contentDescription="@string/text_edit"
+        android:onClick="editTextButton"
         android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>

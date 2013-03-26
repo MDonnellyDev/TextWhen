@@ -9,14 +9,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.ViewParent;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -39,19 +44,19 @@ public class TextListViewer extends Activity {
 			db = new TextDbAdapter(this);
 			db.open();
 		}
-		textList = db.getAllEntriesList();
-		for (OutgoingText text : textList) {
+		this.textList = db.getAllEntriesList();
+		for (OutgoingText text : this.textList) {
 			text.setKey(db.getEntryRow(text));
 		}
 
-		adapter = new ArrayAdapter<OutgoingText>(this, R.layout.outgoingtext,
-				R.id.text_info, textList);
+		this.adapter = new ArrayAdapter<OutgoingText>(this,
+				R.layout.outgoingtext, R.id.text_info, textList);
 
-		scheduledView.setAdapter(adapter);
-		statusView.setText(textList.size() + " pending text"
-				+ (textList.size() == 1 ? "" : "(s)"));
+		this.scheduledView.setAdapter(this.adapter);
+		this.statusView.setText(this.textList.size() + " pending text"
+				+ (this.textList.size() == 1 ? "" : "s"));
 
-		adapter.notifyDataSetChanged();
+		this.adapter.notifyDataSetChanged();
 		return;
 	}
 
@@ -60,11 +65,11 @@ public class TextListViewer extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.textview);
-		scheduledView = (ListView) findViewById(R.id.scheduledView);
-		statusView = (TextView) findViewById(R.id.statusView);
+		this.scheduledView = (ListView) findViewById(R.id.scheduledView);
+		this.statusView = (TextView) findViewById(R.id.statusView);
 
-		this.registerForContextMenu(scheduledView);
-		scheduledView
+		this.registerForContextMenu(this.scheduledView);
+		this.scheduledView
 				.setOnCreateContextMenuListener(new OnCreateContextMenuListener()
 
 				{
@@ -77,8 +82,8 @@ public class TextListViewer extends Activity {
 					}
 				});
 
-		scheduledView.setAdapter(adapter);
-		scheduledView.setClickable(true);
+		this.scheduledView.setAdapter(this.adapter);
+		this.scheduledView.setClickable(true);
 
 	}
 
@@ -168,4 +173,57 @@ public class TextListViewer extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 	}
+
+	public void cancelTextButton(View v) {
+		ListView list = (ListView) v.getParent().getParent();
+		int itemPosition = list.getPositionForView((RelativeLayout) v
+				.getParent());
+		cancelByPosition(itemPosition);
+
+	}
+
+	public void cancelByPosition(int itemPosition) {
+		OutgoingText text = (OutgoingText) scheduledView.getAdapter().getItem(
+				itemPosition);
+		adapter.remove(text);
+
+		Intent intent = new Intent(this, AlarmService.class);
+		intent.putExtra("recipient", text.getRecipient());
+		intent.putExtra("subject", text.getSubject());
+		intent.putExtra("body", text.getMessageContent());
+		intent.putExtra("date", text.getScheduledDateAsLong());
+		intent.putExtra("modified", text.getModifiedDateAsLong());
+		intent.putExtra("key", text.getKey());
+		intent.putExtra("setAlarm", false);
+
+		startService(intent);
+
+		db.removeEntry(db.getEntryRow(text));
+	}
+
+	public void editTextButton(View v) {
+		ListView list = (ListView) v.getParent().getParent();
+		int itemPosition = list.getPositionForView((RelativeLayout) v
+				.getParent());
+		editByPosition(itemPosition);
+
+	}
+
+	private void editByPosition(int itemPosition) {
+		OutgoingText text = (OutgoingText) scheduledView.getAdapter().getItem(
+				itemPosition);
+
+		Intent intent = new Intent(this, TextEditor.class);
+		intent.putExtra("update", true);
+		intent.putExtra("setAlarm", true);
+		intent.putExtra("recipient", text.getRecipient());
+		intent.putExtra("subject", text.getSubject());
+		intent.putExtra("body", text.getMessageContent());
+		intent.putExtra("date", text.getScheduledDateAsLong());
+		intent.putExtra("modified", text.getModifiedDateAsLong());
+		intent.putExtra("key", text.getKey());
+
+		startActivity(intent);
+	}
+
 }
