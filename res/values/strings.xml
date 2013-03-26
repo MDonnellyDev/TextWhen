@@ -19,4 +19,8 @@
 	<string name="description">Description</string>
 	<string name="date_hint">Enter Date</string>
 	<string name="time_hint">Enter Time</string>
+	<string name="btn_view_create">Create new scheduled text</string>
+	<string name="btn_view_switchMode">Switch viewed text categories</string>
+	<string name="view_cancel">Cancel and remove this scheduled text</string>
+	<string name="view_edit">Modify this scheduled text</string>
 </resources>

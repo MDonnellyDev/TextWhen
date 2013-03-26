@@ -1,5 +1,6 @@
 package com.mtd.textwhen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mtd.textwhen.R;
@@ -19,17 +20,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-
 public class TextListViewer extends Activity {
-	private static final int						MENU_ITEM						= Menu.FIRST;
-	private Cursor											dbCursor;
-	private TextDbAdapter								db;
-	private List<OutgoingText>					textList;
-	private ArrayAdapter<OutgoingText>	adapter;
-	private ListView										scheduledView;
-	private TextView										statusView;
-	private int													CONTEXTMENU_DELETE	= 0;
-	private int													CONTEXTMENU_EDIT		= 1;
+	private static final int MENU_ITEM = Menu.FIRST;
+	private Cursor dbCursor;
+	private TextDbAdapter db;
+	private List<OutgoingText> textList;
+	private ArrayAdapter<OutgoingText> adapter;
+	private ListView scheduledView;
+	private TextView statusView;
+	private int CONTEXTMENU_DELETE = 0;
+	private int CONTEXTMENU_EDIT = 1;
 
 	@Override
 	public void onResume() {
@@ -44,12 +44,12 @@ public class TextListViewer extends Activity {
 			text.setKey(db.getEntryRow(text));
 		}
 
-		adapter = new ArrayAdapter<OutgoingText>(this,
-				android.R.layout.simple_list_item_1, textList);
+		adapter = new ArrayAdapter<OutgoingText>(this, R.layout.outgoingtext,
+				R.id.text_info, textList);
 
 		scheduledView.setAdapter(adapter);
-		statusView.setText(getString(R.string.instruction_text) + "\n"
-				+ textList.size() + " texts in pending queue.");
+		statusView.setText(textList.size() + " pending text"
+				+ (textList.size() == 1 ? "" : "(s)"));
 
 		adapter.notifyDataSetChanged();
 		return;
@@ -70,7 +70,8 @@ public class TextListViewer extends Activity {
 				{
 					public void onCreateContextMenu(ContextMenu menu, View v,
 							ContextMenuInfo menuInfo) {
-						menu.add(0, CONTEXTMENU_DELETE, 0, R.string.context_delete);
+						menu.add(0, CONTEXTMENU_DELETE, 0,
+								R.string.context_delete);
 						menu.add(0, CONTEXTMENU_EDIT, 0, R.string.context_edit);
 						return;
 					}
@@ -86,8 +87,8 @@ public class TextListViewer extends Activity {
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item
 				.getMenuInfo();
 		if (item.getItemId() == CONTEXTMENU_DELETE) {
-			OutgoingText text = (OutgoingText) scheduledView.getAdapter().getItem(
-					menuInfo.position);
+			OutgoingText text = (OutgoingText) scheduledView.getAdapter()
+					.getItem(menuInfo.position);
 			adapter.remove(text);
 
 			Intent intent = new Intent(this, AlarmService.class);
@@ -104,8 +105,8 @@ public class TextListViewer extends Activity {
 			db.removeEntry(db.getEntryRow(text));
 
 		} else if (item.getItemId() == CONTEXTMENU_EDIT) {
-			OutgoingText text = (OutgoingText) scheduledView.getAdapter().getItem(
-					menuInfo.position);
+			OutgoingText text = (OutgoingText) scheduledView.getAdapter()
+					.getItem(menuInfo.position);
 
 			Intent intent = new Intent(this, TextEditor.class);
 			intent.putExtra("update", true);
@@ -163,8 +164,8 @@ public class TextListViewer extends Activity {
 
 		return true;
 	}
-	
-	public void onDestroy(){
+
+	public void onDestroy() {
 		super.onDestroy();
 	}
 }

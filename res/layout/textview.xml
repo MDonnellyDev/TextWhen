@@ -4,19 +4,48 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/statusView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/instruction_text"
-        android:textSize="18sp" >
-    </TextView>
-
     <ListView
         android:id="@+id/scheduledView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/statusView" >
+        android:layout_below="@+id/relativeTextControls" >
     </ListView>
+
+    <RelativeLayout
+        android:id="@id/relativeTextControls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:requiresFadingEdge="horizontal" >
+
+        <TextView
+            android:id="@+id/statusView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_view_switchMode"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btn_view_switchMode"
+            android:text="@string/instruction_text"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/btn_view_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/btn_view_create"
+            android:src="@android:drawable/ic_input_add" />
+
+        <ImageButton
+            android:id="@+id/btn_view_switchMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btn_view_create"
+            android:contentDescription="@string/btn_view_switchMode"
+            android:src="@android:drawable/ic_menu_rotate" />
+    </RelativeLayout>
 
 </RelativeLayout>

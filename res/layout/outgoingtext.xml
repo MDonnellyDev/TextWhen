@@ -6,21 +6,32 @@
     android:padding="6dp" >
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/text_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="@string/name" >
+        android:layout_alignBottom="@+id/view_btn_delete"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/view_btn_delete"
+        android:layout_toLeftOf="@id/view_btn_delete"
+        android:textIsSelectable="true" >
     </TextView>
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@id/view_btn_delete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/view_btn_edit"
+        android:layout_toLeftOf="@id/view_btn_edit"
+        android:contentDescription="@string/view_edit"
+        android:src="@android:drawable/ic_menu_delete" />
+
+    <ImageButton
+        android:id="@id/view_btn_edit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/tv_name"
-        android:text="@string/description" >
-    </TextView>
+        android:contentDescription="@string/view_cancel"
+        android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>
