@@ -226,4 +226,12 @@ public class TextListViewer extends Activity {
 		startActivity(intent);
 	}
 
+	public void createTextButton(View v) {
+		Intent intent = new Intent(this, TextEditor.class);
+		intent.putExtra("update", false);
+		intent.putExtra("setAlarm", true);
+		startActivity(intent);
+
+	}
+
 }

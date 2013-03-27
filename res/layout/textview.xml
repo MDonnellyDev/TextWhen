@@ -36,6 +36,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:contentDescription="@string/btn_view_create"
+            android:onClick="createTextButton"
             android:src="@android:drawable/ic_input_add" />
 
         <ImageButton
