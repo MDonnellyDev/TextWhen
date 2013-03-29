@@ -40,10 +40,16 @@ public class TextListViewer extends Activity {
 	public void onResume() {
 		super.onResume();
 
-		if (db == null) {
-			db = new TextDbAdapter(this);
-			db.open();
+		if (this.db == null) {
+			this.db = new TextDbAdapter(this);
+			this.db.open();
 		}
+
+		setAdapterByTextStatus();
+		return;
+	}
+
+	private void setAdapterByTextStatus() {
 		this.textList = db.getAllEntriesList();
 		for (OutgoingText text : this.textList) {
 			text.setKey(db.getEntryRow(text));
@@ -51,13 +57,15 @@ public class TextListViewer extends Activity {
 
 		this.adapter = new ArrayAdapter<OutgoingText>(this,
 				R.layout.outgoingtext, R.id.text_info, textList);
-
 		this.scheduledView.setAdapter(this.adapter);
+
+		updateStatusView();
+		this.adapter.notifyDataSetChanged();
+	}
+
+	private void updateStatusView() {
 		this.statusView.setText(this.textList.size() + " pending text"
 				+ (this.textList.size() == 1 ? "" : "s"));
-
-		this.adapter.notifyDataSetChanged();
-		return;
 	}
 
 	/** Called when the activity is first created. */
@@ -146,28 +154,6 @@ public class TextListViewer extends Activity {
 		super.onPause();
 		db.close();
 		db = null;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		int groupId = 0;
-		int menuItemId = MENU_ITEM;
-		MenuItem menuItem = menu.add(groupId, MENU_ITEM, 0,
-				this.getString(R.string.btn_addNew));
-		menuItem.setIntent(new Intent(this, TextEditor.class));
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		Intent intent = item.getIntent();
-		intent.putExtra("update", false);
-		intent.putExtra("setAlarm", true);
-		startActivity(intent);
-
-		return true;
 	}
 
 	public void onDestroy() {
