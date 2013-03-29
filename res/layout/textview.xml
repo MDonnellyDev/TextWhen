@@ -26,6 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/btn_view_switchMode"
+            android:gravity="center|center_vertical"
             android:text="@string/instruction_text"
             android:textSize="18sp" />
 
